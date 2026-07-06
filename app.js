@@ -8,7 +8,8 @@ const CONFIG = {
   PASSWORD: "controlroom@rmd",
   API_URL_KEY: "rmd_api_url",
   COMPLAINTS_KEY: "rmd_complaints",
-  SESSION_KEY: "rmd_session_active"
+  SESSION_KEY: "rmd_session_active",
+  DEFAULT_API_URL: "https://script.google.com/macros/s/AKfycby5s-zgqnfHyTxkj3lVz_H0Q8Ov52kU2meAUeE4FmZZIUfcc14SMfOIi1QrhT91in4P/exec"
 };
 
 // Application State
@@ -43,8 +44,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function initApp() {
   // Load configuration
-  state.apiUrl = localStorage.getItem(CONFIG.API_URL_KEY) || "";
+  const savedApiUrl = localStorage.getItem(CONFIG.API_URL_KEY);
+  state.apiUrl = savedApiUrl || CONFIG.DEFAULT_API_URL;
   document.getElementById("api-url-input").value = state.apiUrl;
+
+  if (savedApiUrl) {
+    state.isMockMode = false;
+    document.getElementById("api-warning-banner").classList.add("d-none");
+  } else {
+    // Persist the default Apps Script deployment URL so the portal starts in live mode automatically.
+    localStorage.setItem(CONFIG.API_URL_KEY, state.apiUrl);
+    state.isMockMode = false;
+    document.getElementById("api-warning-banner").classList.add("d-none");
+  }
   
   if (state.apiUrl) {
     state.isMockMode = false;
