@@ -1,0 +1,462 @@
+/* ==========================================================================
+   Ramanathapuram District Control Room - Custom Theme & Stylesheet
+   Theme: Professional Government (Blue & White, Slate, Emerald, Amber)
+   ========================================================================== */
+
+:root {
+  --primary-color: #0a369d;
+  --primary-hover: #082c80;
+  --primary-light: #4c82f7;
+  --primary-bg: #eaf2ff;
+  
+  --dark-sidebar: #0f172a;
+  --dark-sidebar-hover: #1e293b;
+  --dark-sidebar-active: #1e3a8a;
+  
+  --bg-light: #f8fafc;
+  --text-main: #1e293b;
+  --text-secondary: #64748b;
+  --border-color: #e2e8f0;
+  
+  --priority-high: #ef4444;
+  --priority-medium: #f59e0b;
+  --priority-low: #3b82f6;
+  
+  --status-pending: #f59e0b;
+  --status-inprogress: #0d9488;
+  --status-completed: #10b981;
+}
+
+/* Global Styles */
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-light);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.font-outfit {
+  font-family: 'Outfit', sans-serif;
+}
+
+.font-xs {
+  font-size: 0.75rem;
+}
+
+.tracking-wider {
+  letter-spacing: 0.08em;
+}
+
+/* Micro-animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* ==================== LOGIN STYLING ==================== */
+#login-view {
+  background: linear-gradient(135deg, #02153c 0%, #0a369d 100%);
+}
+
+.login-card {
+  max-width: 900px;
+  width: 95%;
+  min-height: 520px;
+}
+
+.login-banner {
+  background: linear-gradient(135deg, #09318f 0%, #06236b 100%);
+  background-size: cover;
+  position: relative;
+}
+
+.login-banner::after {
+  content: "";
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: radial-gradient(circle at 10% 20%, rgba(10, 54, 157, 0.2) 0%, rgba(2, 21, 60, 0.4) 90%);
+}
+
+.login-banner > * {
+  position: relative;
+  z-index: 1;
+}
+
+.banner-badge {
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  display: inline-block;
+}
+
+.emblem-container {
+  width: 70px;
+  height: 70px;
+  background-color: var(--primary-bg);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.btn-login {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-login:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.demo-reset-btn {
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.demo-reset-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background-color: var(--primary-bg);
+}
+
+/* ==================== PORTAL SPA LAYOUT ==================== */
+#portal-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Styling */
+#sidebar {
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  background-color: var(--dark-sidebar) !important;
+}
+
+.text-primary-light {
+  color: var(--primary-light) !important;
+}
+
+.sidebar-menu {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.sidebar-menu .nav-link {
+  color: #94a3b8;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  margin-bottom: 4px;
+}
+
+.sidebar-menu .nav-link i {
+  font-size: 1.1rem;
+  width: 20px;
+}
+
+.sidebar-menu .nav-link:hover {
+  color: #ffffff;
+  background-color: var(--dark-sidebar-hover);
+}
+
+.sidebar-menu .nav-link.active {
+  color: #ffffff;
+  background-color: var(--dark-sidebar-active);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Main Content Wrapper */
+#content-area {
+  flex-grow: 1;
+  margin-left: 260px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+/* Responsive Sidebar toggling */
+@media (max-width: 768px) {
+  #sidebar {
+    left: -260px;
+  }
+  #sidebar.active {
+    left: 0;
+  }
+  #content-area {
+    margin-left: 0;
+  }
+}
+
+/* Header */
+header.sticky-top {
+  z-index: 990;
+}
+
+/* Cards & Layout */
+.metric-card {
+  transition: all 0.25s ease;
+  position: relative;
+  background-color: #ffffff;
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.metric-card::after {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+}
+
+.metric-card:nth-child(1)::after, .col-xl-3:nth-child(1) .metric-card::after { background-color: var(--primary-color); }
+.metric-card:nth-child(2)::after, .col-xl-3:nth-child(2) .metric-card::after { background-color: #0dcaf0; }
+.metric-card:nth-child(3)::after, .col-xl-3:nth-child(3) .metric-card::after { background-color: var(--priority-medium); }
+.metric-card:nth-child(4)::after, .col-xl-3:nth-child(4) .metric-card::after { background-color: var(--status-completed); }
+
+.metric-icon-wrapper {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Quick Action Buttons */
+.quick-action-btn {
+  border: 1px solid var(--border-color);
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.quick-action-btn:hover {
+  background-color: var(--primary-bg);
+  border-color: var(--primary-light);
+  transform: translateX(4px);
+}
+
+.quick-action-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+/* Tables, Badges and General UI Elements */
+.table thead th {
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.recent-complaints-table tbody tr:hover {
+  background-color: var(--primary-bg);
+  cursor: pointer;
+}
+
+/* Custom Status Badges */
+.badge-status {
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+}
+
+.badge-status.pending {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.badge-status.inprogress {
+  background-color: #ccfbf1;
+  color: #0f766e;
+}
+
+.badge-status.completed {
+  background-color: #d1fae5;
+  color: #047857;
+}
+
+/* Custom Priority Badges */
+.badge-priority {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.badge-priority.high {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.badge-priority.medium {
+  background-color: #fff3c4;
+  color: #b25e00;
+}
+
+.badge-priority.low {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+/* Form Styles */
+.form-section-title {
+  font-weight: 600;
+  border-bottom: 2px solid var(--primary-bg);
+  padding-bottom: 8px;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 0.25rem rgba(10, 54, 157, 0.15);
+}
+
+/* Toast styling overriding bootstrap defaults slightly */
+#system-toast {
+  color: white;
+}
+#system-toast.success {
+  background-color: var(--status-completed);
+}
+#system-toast.error {
+  background-color: var(--priority-high);
+}
+#system-toast.info {
+  background-color: var(--primary-color);
+}
+
+/* ==================== PRINT STYLING ==================== */
+/* Screen Only details to hide during print */
+@media screen {
+  #receipt-print-section {
+    display: none !important;
+  }
+}
+
+/* Custom CSS for printing receipts */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    font-size: 12pt;
+    color: #000000;
+  }
+
+  /* Hide absolutely everything else */
+  #portal-container, 
+  #login-view, 
+  .modal, 
+  .modal-backdrop, 
+  .toast-container,
+  header,
+  aside {
+    display: none !important;
+  }
+
+  /* Display and expand receipt */
+  #receipt-print-section {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 20mm !important;
+    box-shadow: none !important;
+  }
+
+  .print-emblem i {
+    font-size: 24pt !important;
+    color: #000000 !important;
+  }
+
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  .print-table th, .print-table td {
+    border: 1px solid #94a3b8;
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .print-table th {
+    background-color: #f1f5f9 !important;
+    color: #000000 !important;
+    font-weight: bold;
+    width: 25%;
+  }
+
+  .print-table td {
+    width: 25%;
+  }
+
+  .border {
+    border: 1px solid #94a3b8 !important;
+  }
+
+  .p-2 {
+    padding: 8px !important;
+  }
+
+  .bg-light {
+    background-color: #f8fafc !important;
+  }
+  
+  .rounded {
+    border-radius: 4px !important;
+  }
+
+  /* Avoid page breaks inside layout elements */
+  #receipt-print-section, .print-table, .print-description, .print-remarks, .print-footer {
+    page-break-inside: avoid;
+  }
+}
