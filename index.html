@@ -413,6 +413,18 @@
                         <div class="invalid-feedback">Please enter the village name.</div>
                       </div>
                     </div>
+                    <div class="row g-3 mb-4">
+                      <div class="col-md-6">
+                        <label for="block" class="form-label small fw-semibold text-secondary">Block</label>
+                        <input type="text" id="block" class="form-control border-secondary-subtle" placeholder="Enter block name" required>
+                        <div class="invalid-feedback">Please enter the block name.</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="village-panchayat" class="form-label small fw-semibold text-secondary">Village Panchayat</label>
+                        <input type="text" id="village-panchayat" class="form-control border-secondary-subtle" placeholder="Enter village panchayat name" required>
+                        <div class="invalid-feedback">Please enter the village panchayat name.</div>
+                      </div>
+                    </div>
 
                     <!-- Department and Grievance Details Row -->
                     <h6 class="form-section-title font-outfit mb-3 text-primary"><i class="fa-solid fa-circle-info me-2"></i> Grievance & Routing Details</h6>
@@ -705,6 +717,14 @@
               <div class="text-secondary" id="modal-location">---</div>
             </div>
             <div class="col-md-6">
+              <label class="form-label small fw-semibold text-secondary m-0">Block</label>
+              <div class="text-secondary" id="modal-block">---</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold text-secondary m-0">Village Panchayat</label>
+              <div class="text-secondary fw-semibold" id="modal-village-panchayat">---</div>
+            </div>
+            <div class="col-md-6">
               <label class="form-label small fw-semibold text-secondary m-0">Assigned Department</label>
               <div class="text-secondary fw-semibold" id="modal-department">---</div>
             </div>
@@ -729,6 +749,14 @@
                   <option value="In Progress">In Progress</option>
                   <option value="Completed">Completed</option>
                 </select>
+              </div>
+              <div class="col-md-6">
+                <label for="modal-update-block" class="form-label small fw-semibold text-secondary">Block</label>
+                <input type="text" id="modal-update-block" class="form-control border-primary-subtle" required>
+              </div>
+              <div class="col-md-6">
+                <label for="modal-update-village-panchayat" class="form-label small fw-semibold text-secondary">Village Panchayat</label>
+                <input type="text" id="modal-update-village-panchayat" class="form-control border-primary-subtle" required>
               </div>
               <div class="col-12">
                 <label for="modal-update-remarks" class="form-label small fw-semibold text-secondary">Department Resolution / Operational Remarks</label>
@@ -790,6 +818,12 @@
         <td id="print-receipt-taluk">Ramanathapuram</td>
         <th>Village:</th>
         <td id="print-receipt-village">Collectorate Area</td>
+      </tr>
+      <tr>
+        <th>Block:</th>
+        <td id="print-receipt-block">N/A</td>
+        <th>Village Panchayat:</th>
+        <td id="print-receipt-village-panchayat">N/A</td>
       </tr>
       <tr>
         <th>Routing Dept:</th>

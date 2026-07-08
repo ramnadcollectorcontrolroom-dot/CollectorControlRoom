@@ -470,8 +470,10 @@ function handleRegisterComplaint(e) {
     time: document.getElementById("complaint-time").value,
     citizenName: document.getElementById("citizen-name").value.trim(),
     mobileNumber: document.getElementById("mobile-number").value.trim(),
-    village: document.getElementById("village").value.trim(),
     taluk: document.getElementById("taluk").value,
+    village: document.getElementById("village").value.trim(),
+    block: document.getElementById("block").value.trim(),
+    villagePanchayat: document.getElementById("village-panchayat").value.trim(),
     department: document.getElementById("department").value,
     description: document.getElementById("complaint-desc").value.trim(),
     priority: document.getElementById("priority").value,
@@ -635,6 +637,9 @@ function printFormDraft() {
   const description = document.getElementById("complaint-desc").value.trim() || "[Description]";
   const priority = document.getElementById("priority").value;
   
+  const block = document.getElementById("block").value.trim() || "[Block]";
+  const villagePanchayat = document.getElementById("village-panchayat").value.trim() || "[Village Panchayat]";
+
   const draft = {
     id: "DRAFT-RECEIPT",
     date: document.getElementById("complaint-date").value,
@@ -643,6 +648,8 @@ function printFormDraft() {
     mobileNumber: mobile,
     taluk: taluk,
     village: village,
+    block: block,
+    villagePanchayat: villagePanchayat,
     department: department,
     priority: priority,
     status: "Draft",
@@ -747,6 +754,7 @@ function renderDirectoryListTable() {
       <td>
         <div class="small">${escapeHtml(c.village)}</div>
         <small class="text-muted font-xs">${escapeHtml(c.taluk)} Taluk</small>
+        <small class="text-muted font-xs d-block">Block: ${escapeHtml(c.block || '-')}, Panchayat: ${escapeHtml(c.villagePanchayat || '-')}</small>
       </td>
       <td><span class="small">${escapeHtml(c.department)}</span></td>
       <td><span class="badge-priority ${c.priority.toLowerCase()}">${escapeHtml(c.priority)}</span></td>
@@ -828,11 +836,15 @@ function openEditModal(complaintId) {
   document.getElementById("modal-name").textContent = complaint.citizenName;
   document.getElementById("modal-mobile").textContent = complaint.mobileNumber;
   document.getElementById("modal-location").textContent = `${complaint.village}, ${complaint.taluk} Taluk`;
+  document.getElementById("modal-block").textContent = complaint.block || "-";
+  document.getElementById("modal-village-panchayat").textContent = complaint.villagePanchayat || "-";
   document.getElementById("modal-department").textContent = complaint.department;
   document.getElementById("modal-desc").textContent = complaint.description;
   
   document.getElementById("modal-update-priority").value = complaint.priority;
   document.getElementById("modal-update-status").value = complaint.status;
+  document.getElementById("modal-update-block").value = complaint.block || "";
+  document.getElementById("modal-update-village-panchayat").value = complaint.villagePanchayat || "";
   document.getElementById("modal-update-remarks").value = complaint.remarks || "";
   
   // Toggle overlay loading
@@ -850,11 +862,13 @@ function handleModalUpdate() {
   const id = document.getElementById("modal-id").textContent;
   const status = document.getElementById("modal-update-status").value;
   const remarks = document.getElementById("modal-update-remarks").value.trim();
+  const block = document.getElementById("modal-update-block").value.trim();
+  const villagePanchayat = document.getElementById("modal-update-village-panchayat").value.trim();
   const overlay = document.getElementById("modal-loading-overlay");
   
   overlay.classList.remove("d-none");
   
-  const updateData = { status, remarks };
+  const updateData = { status, remarks, block, villagePanchayat };
   
   if (state.isMockMode) {
     // Local update
@@ -862,9 +876,11 @@ function handleModalUpdate() {
     if (idx !== -1) {
       state.complaints[idx].status = status;
       state.complaints[idx].remarks = remarks;
+      state.complaints[idx].block = block;
+      state.complaints[idx].villagePanchayat = villagePanchayat;
       localStorage.setItem(CONFIG.COMPLAINTS_KEY, JSON.stringify(state.complaints));
     }
-    
+
     setTimeout(() => {
       overlay.classList.add("d-none");
       bootstrap.Modal.getOrCreateInstance(document.getElementById("editComplaintModal")).hide();
@@ -912,6 +928,8 @@ function handleModalUpdate() {
       if (idx !== -1) {
         state.complaints[idx].status = status;
         state.complaints[idx].remarks = remarks;
+        state.complaints[idx].block = block;
+        state.complaints[idx].villagePanchayat = villagePanchayat;
         localStorage.setItem(CONFIG.COMPLAINTS_KEY, JSON.stringify(state.complaints));
       }
       
@@ -933,6 +951,8 @@ function fillPrintReceipt(complaint) {
   document.getElementById("print-receipt-mobile").textContent = complaint.mobileNumber;
   document.getElementById("print-receipt-taluk").textContent = complaint.taluk;
   document.getElementById("print-receipt-village").textContent = complaint.village;
+  document.getElementById("print-receipt-block").textContent = complaint.block || "-";
+  document.getElementById("print-receipt-village-panchayat").textContent = complaint.villagePanchayat || "-";
   document.getElementById("print-receipt-department").textContent = complaint.department;
   document.getElementById("print-receipt-status").textContent = complaint.status;
   document.getElementById("print-receipt-desc").textContent = complaint.description;
@@ -1233,6 +1253,8 @@ function getSampleComplaints() {
       mobileNumber: "9845612301",
       village: "Pamban Jetty Road",
       taluk: "Rameswaram",
+      block: "Rameswaram Block",
+      villagePanchayat: "Pamban Panchayat",
       department: "Electricity (TANGEDCO)",
       description: "Frequent power outages in our street for the past three days. Substation reports load shedding but other areas have power. Street lights are also out.",
       priority: "High",
@@ -1247,6 +1269,8 @@ function getSampleComplaints() {
       mobileNumber: "9442318950",
       village: "Valantharavai Village",
       taluk: "Ramanathapuram",
+      block: "Ramanathapuram Block",
+      villagePanchayat: "Valantharavai Panchayat",
       department: "Water Supply (TWAD / Panchayats)",
       description: "Drinking water supply not provided for the last two weeks. Main valve pipeline blocked near railway track. Requests pipeline flush.",
       priority: "High",
@@ -1261,6 +1285,8 @@ function getSampleComplaints() {
       mobileNumber: "9786012345",
       village: "Ervadi Dargah Street",
       taluk: "Kilakarai",
+      block: "Kilakarai Block",
+      villagePanchayat: "Ervadi Panchayat",
       department: "Revenue",
       description: "Application for patta transfer pending at Revenue inspector office for over a month. Need status update. Reference No: REV-98213.",
       priority: "Medium",
@@ -1275,6 +1301,8 @@ function getSampleComplaints() {
       mobileNumber: "8122340567",
       village: "Sathirakudi Main Bazaar",
       taluk: "Paramakudi",
+      block: "Paramakudi Block",
+      villagePanchayat: "Sathirakudi Panchayat",
       department: "Panchayats (Rural Development)",
       description: "Street lights are not functioning in Ambedkar Nagar street near government school. Creating safety issues in evening hours.",
       priority: "Low",
@@ -1289,6 +1317,8 @@ function getSampleComplaints() {
       mobileNumber: "9080706050",
       village: "Sayalgudi bus stand",
       taluk: "Kadaladi",
+      block: "Kadaladi Block",
+      villagePanchayat: "Sayalgudi Panchayat",
       department: "Police",
       description: "Nuisance by street vendors blocking shop entrance near local market. Causing heavy traffic congestion.",
       priority: "Low",
