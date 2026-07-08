@@ -9,7 +9,8 @@ const CONFIG = {
   API_URL_KEY: "rmd_api_url",
   COMPLAINTS_KEY: "rmd_complaints",
   SESSION_KEY: "rmd_session_active",
-  DEFAULT_API_URL: "https://script.google.com/macros/s/AKfycby5s-zgqnfHyTxkj3lVz_H0Q8Ov52kU2meAUeE4FmZZIUfcc14SMfOIi1QrhT91in4P/exec"
+  DEFAULT_API_URL: "https://script.google.com/macros/s/AKfycbzE7HTJwqu4ygSYXG0ZGAklRiYetT00nzZbVeOfnTYCCmgrRtCx0Cg6FFj6ABNSbyPu/exec"
+  
   
   
 };
