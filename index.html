@@ -416,13 +416,13 @@
                     <div class="row g-3 mb-4">
                       <div class="col-md-6">
                         <label for="block" class="form-label small fw-semibold text-secondary">Block</label>
-                        <input type="text" id="block" class="form-control border-secondary-subtle" placeholder="Enter block name" required>
-                        <div class="invalid-feedback">Please enter the block name.</div>
+                        <input type="text" id="block" class="form-control border-secondary-subtle" placeholder="Block will be auto-filled" required readonly>
+                        <div class="invalid-feedback">Please select the village to auto-fill the block.</div>
                       </div>
                       <div class="col-md-6">
                         <label for="village-panchayat" class="form-label small fw-semibold text-secondary">Village Panchayat</label>
-                        <input type="text" id="village-panchayat" class="form-control border-secondary-subtle" placeholder="Enter village panchayat name" required>
-                        <div class="invalid-feedback">Please enter the village panchayat name.</div>
+                        <input type="text" id="village-panchayat" class="form-control border-secondary-subtle" placeholder="Panchayat will be auto-filled" required readonly>
+                        <div class="invalid-feedback">Please select the village to auto-fill the village panchayat.</div>
                       </div>
                     </div>
 
@@ -514,8 +514,16 @@
                     <input type="text" id="search-mobile" class="form-control" placeholder="10-digit number">
                   </div>
                   <div class="col-xl-2 col-md-4">
+                    <label for="search-taluk" class="form-label small fw-semibold text-secondary">Taluk</label>
+                    <select id="search-taluk" class="form-select">
+                      <option value="">All Taluks</option>
+                    </select>
+                  </div>
+                  <div class="col-xl-2 col-md-4">
                     <label for="search-village" class="form-label small fw-semibold text-secondary">Village</label>
-                    <input type="text" id="search-village" class="form-control" placeholder="Village name">
+                    <select id="search-village" class="form-select">
+                      <option value="">All Villages</option>
+                    </select>
                   </div>
                   <div class="col-xl-2 col-md-4">
                     <label for="search-department" class="form-label small fw-semibold text-secondary">Department</label>

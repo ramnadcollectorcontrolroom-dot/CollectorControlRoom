@@ -10,6 +10,8 @@ const CONFIG = {
   COMPLAINTS_KEY: "rmd_complaints",
   SESSION_KEY: "rmd_session_active",
   DEPARTMENT_LIST_KEY: "rmd_department_list",
+  LOCATION_MASTER_KEY: "rmd_location_master",
+  LOCATION_MASTER_URL: "",
   DEPARTMENT_EXCEL_URL: "",
   DEFAULT_API_URL: "https://script.google.com/macros/s/AKfycbzE7HTJwqu4ygSYXG0ZGAklRiYetT00nzZbVeOfnTYCCmgrRtCx0Cg6FFj6ABNSbyPu/exec"
 };
@@ -37,6 +39,28 @@ const DEFAULT_DEPARTMENT_OPTIONS = [
   "TWAD-Cauvery Water"
 ];
 
+const DEFAULT_LOCATION_MASTER = [
+  { taluk: "Ramanathapuram", village: "A. Vellalapatti", block: "Ramanathapuram", villagePanchayat: "A. Vellalapatti" },
+  { taluk: "Ramanathapuram", village: "K. Pudur", block: "Ramanathapuram", villagePanchayat: "K. Pudur" },
+  { taluk: "Ramanathapuram", village: "Kudalore", block: "Ramanathapuram", villagePanchayat: "Kudalore" },
+  { taluk: "Rameswaram", village: "Rameswaram Town", block: "Rameswaram", villagePanchayat: "Rameswaram Town" },
+  { taluk: "Rameswaram", village: "Pamban", block: "Rameswaram", villagePanchayat: "Pamban" },
+  { taluk: "Tiruvadanai", village: "Tiruvadanai", block: "Tiruvadanai", villagePanchayat: "Tiruvadanai" },
+  { taluk: "Tiruvadanai", village: "Mangalakudi", block: "Tiruvadanai", villagePanchayat: "Mangalakudi" },
+  { taluk: "Paramakudi", village: "Paramakudi", block: "Paramakudi", villagePanchayat: "Paramakudi" },
+  { taluk: "Paramakudi", village: "Nainarkoil", block: "Paramakudi", villagePanchayat: "Nainarkoil" },
+  { taluk: "Mudukulathur", village: "Mudukulathur", block: "Mudukulathur", villagePanchayat: "Mudukulathur" },
+  { taluk: "Mudukulathur", village: "Mela Karisal", block: "Mudukulathur", villagePanchayat: "Mela Karisal" },
+  { taluk: "Kamuthi", village: "Kamuthi", block: "Kamuthi", villagePanchayat: "Kamuthi" },
+  { taluk: "Kamuthi", village: "Puduvayal", block: "Kamuthi", villagePanchayat: "Puduvayal" },
+  { taluk: "Kadaladi", village: "Kadaladi", block: "Kadaladi", villagePanchayat: "Kadaladi" },
+  { taluk: "Kadaladi", village: "Natarajapuram", block: "Kadaladi", villagePanchayat: "Natarajapuram" },
+  { taluk: "Kilakarai", village: "Kilakarai", block: "Kilakarai", villagePanchayat: "Kilakarai" },
+  { taluk: "Kilakarai", village: "Ervadi", block: "Kilakarai", villagePanchayat: "Ervadi" },
+  { taluk: "R.S. Mangalam", village: "R.S. Mangalam", block: "R.S. Mangalam", villagePanchayat: "R.S. Mangalam" },
+  { taluk: "R.S. Mangalam", village: "Sathirakudi", block: "R.S. Mangalam", villagePanchayat: "Sathirakudi" }
+];
+
 // Application State
 let state = {
   complaints: [],
@@ -46,6 +70,9 @@ let state = {
   currentPage: 1,
   pageSize: 10,
   departmentOptions: [],
+  locationMaster: [],
+  locationIndex: {},
+  talukOptions: [],
   charts: {
     status: null,
     priority: null,
@@ -109,6 +136,140 @@ function initApp() {
 
   // Load Department dropdown options
   loadDepartmentOptions();
+  loadLocationMaster();
+}
+
+function loadLocationMaster() {
+  const savedLocations = localStorage.getItem(CONFIG.LOCATION_MASTER_KEY);
+  let master = [];
+
+  if (savedLocations) {
+    try {
+      const parsed = JSON.parse(savedLocations);
+      if (Array.isArray(parsed) && parsed.length) {
+        master = parsed;
+      }
+    } catch (error) {
+      console.warn("Failed to parse saved location master", error);
+    }
+  }
+
+  if (!master.length) {
+    master = DEFAULT_LOCATION_MASTER;
+  }
+
+  state.locationMaster = normalizeLocationMaster(master);
+  state.locationIndex = buildLocationIndex(state.locationMaster);
+  state.talukOptions = Object.keys(state.locationIndex).sort((a, b) => a.localeCompare(b));
+
+  populateLocationSelects();
+
+  try {
+    localStorage.setItem(CONFIG.LOCATION_MASTER_KEY, JSON.stringify(state.locationMaster));
+  } catch (error) {
+    console.warn("Unable to save location master locally", error);
+  }
+}
+
+function normalizeLocationMaster(items) {
+  if (!Array.isArray(items)) return [];
+
+  const normalized = items
+    .map(item => ({
+      taluk: String(item?.taluk || item?.Taluk || "").trim(),
+      village: String(item?.village || item?.Village || "").trim(),
+      block: String(item?.block || item?.Block || "").trim(),
+      villagePanchayat: String(item?.villagePanchayat || item?.["Village Panchayat"] || item?.["Village Panchayat Name"] || "").trim()
+    }))
+    .filter(item => item.taluk && item.village && item.block && item.villagePanchayat);
+
+  const unique = [];
+  const seen = new Set();
+  normalized.forEach(item => {
+    const key = `${item.taluk}|${item.village}|${item.block}|${item.villagePanchayat}`.toLowerCase();
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(item);
+    }
+  });
+
+  unique.sort((a, b) => a.taluk.localeCompare(b.taluk) || a.village.localeCompare(b.village));
+  return unique;
+}
+
+function buildLocationIndex(master) {
+  return master.reduce((acc, item) => {
+    if (!acc[item.taluk]) acc[item.taluk] = [];
+    acc[item.taluk].push({
+      village: item.village,
+      block: item.block,
+      villagePanchayat: item.villagePanchayat
+    });
+    return acc;
+  }, {});
+}
+
+function populateLocationSelects() {
+  const talukSelect = document.getElementById("taluk");
+  const villageSelect = document.getElementById("village");
+  const searchTalukSelect = document.getElementById("search-taluk");
+  const searchVillageSelect = document.getElementById("search-village");
+
+  if (talukSelect) {
+    const currentValue = talukSelect.value;
+    talukSelect.innerHTML = '<option value="" disabled selected>-- Select Taluk --</option>';
+    state.talukOptions.forEach(taluk => {
+      const option = document.createElement("option");
+      option.value = taluk;
+      option.textContent = taluk;
+      if (currentValue === taluk) option.selected = true;
+      talukSelect.appendChild(option);
+    });
+  }
+
+  if (searchTalukSelect) {
+    searchTalukSelect.innerHTML = '<option value="">All Taluks</option>';
+    state.talukOptions.forEach(taluk => {
+      const option = document.createElement("option");
+      option.value = taluk;
+      option.textContent = taluk;
+      searchTalukSelect.appendChild(option);
+    });
+  }
+
+  if (searchVillageSelect) {
+    searchVillageSelect.innerHTML = '<option value="">All Villages</option>';
+    const villages = getVillagesForTaluk(searchTalukSelect?.value || "");
+    villages.forEach(village => {
+      const option = document.createElement("option");
+      option.value = village;
+      option.textContent = village;
+      searchVillageSelect.appendChild(option);
+    });
+  }
+
+  if (villageSelect) {
+    villageSelect.innerHTML = '<option value="" disabled selected>-- Select Village --</option>';
+    if (talukSelect?.value) {
+      const villages = getVillagesForTaluk(talukSelect.value);
+      villages.forEach(village => {
+        const option = document.createElement("option");
+        option.value = village;
+        option.textContent = village;
+        villageSelect.appendChild(option);
+      });
+    }
+  }
+}
+
+function getVillagesForTaluk(taluk) {
+  if (!taluk || !state.locationIndex[taluk]) return [];
+  return state.locationIndex[taluk].map(item => item.village).sort((a, b) => a.localeCompare(b));
+}
+
+function getLocationEntry(taluk, village) {
+  if (!taluk || !village || !state.locationIndex[taluk]) return null;
+  return state.locationIndex[taluk].find(item => item.village === village) || null;
 }
 
 function loadDepartmentOptions() {
@@ -321,6 +482,14 @@ function setupEventListeners() {
     fetchData();
   });
   
+  // Location selection handling
+  document.getElementById("taluk").addEventListener("change", handleTalukChange);
+  document.getElementById("village").addEventListener("change", handleVillageChange);
+  const searchTalukSelect = document.getElementById("search-taluk");
+  if (searchTalukSelect) {
+    searchTalukSelect.addEventListener("change", handleSearchTalukChange);
+  }
+
   // Save API URL Button
   document.getElementById("save-api-url-btn").addEventListener("click", () => {
     const inputUrl = document.getElementById("api-url-input").value.trim();
@@ -633,6 +802,13 @@ function resetRegistrationForm() {
   const form = document.getElementById("register-complaint-form");
   form.reset();
   form.classList.remove("was-validated");
+
+  const villageSelect = document.getElementById("village");
+  if (villageSelect) {
+    villageSelect.innerHTML = '<option value="" disabled selected>-- Select Village --</option>';
+  }
+  document.getElementById("block").value = "";
+  document.getElementById("village-panchayat").value = "";
   
   // Set current date and time
   const todayStr = getTodayDateString();
@@ -781,6 +957,63 @@ function toggleVoiceDictation() {
   recognition.start();
 }
 
+function handleTalukChange() {
+  const talukSelect = document.getElementById("taluk");
+  const villageSelect = document.getElementById("village");
+  const selectedTaluk = talukSelect.value;
+
+  villageSelect.innerHTML = '<option value="" disabled selected>-- Select Village --</option>';
+  document.getElementById("block").value = "";
+  document.getElementById("village-panchayat").value = "";
+
+  if (!selectedTaluk) {
+    return;
+  }
+
+  getVillagesForTaluk(selectedTaluk).forEach(village => {
+    const option = document.createElement("option");
+    option.value = village;
+    option.textContent = village;
+    villageSelect.appendChild(option);
+  });
+}
+
+function handleVillageChange() {
+  const villageSelect = document.getElementById("village");
+  const selectedVillage = villageSelect.value;
+  const selectedTaluk = document.getElementById("taluk").value;
+
+  if (!selectedTaluk || !selectedVillage) {
+    document.getElementById("block").value = "";
+    document.getElementById("village-panchayat").value = "";
+    return;
+  }
+
+  const locationEntry = getLocationEntry(selectedTaluk, selectedVillage);
+  if (locationEntry) {
+    document.getElementById("block").value = locationEntry.block;
+    document.getElementById("village-panchayat").value = locationEntry.villagePanchayat;
+  }
+}
+
+function handleSearchTalukChange() {
+  const searchTalukSelect = document.getElementById("search-taluk");
+  const searchVillageSelect = document.getElementById("search-village");
+  const selectedTaluk = searchTalukSelect?.value || "";
+
+  searchVillageSelect.innerHTML = '<option value="">All Villages</option>';
+  if (!selectedTaluk) {
+    return;
+  }
+
+  getVillagesForTaluk(selectedTaluk).forEach(village => {
+    const option = document.createElement("option");
+    option.value = village;
+    option.textContent = village;
+    searchVillageSelect.appendChild(option);
+  });
+}
+
 function handleRegisterComplaint(e) {
   e.preventDefault();
   const form = document.getElementById("register-complaint-form");
@@ -791,6 +1024,18 @@ function handleRegisterComplaint(e) {
     return;
   }
   
+  const taluk = document.getElementById("taluk").value;
+  const village = document.getElementById("village").value;
+  const block = document.getElementById("block").value.trim();
+  const villagePanchayat = document.getElementById("village-panchayat").value.trim();
+  const locationEntry = getLocationEntry(taluk, village);
+
+  if (!taluk || !village || !locationEntry || !block || !villagePanchayat) {
+    form.classList.add("was-validated");
+    showToast("Please select a valid Taluk and Village. Block and Village Panchayat must be auto-filled from the location master.", "error");
+    return;
+  }
+
   const saveBtn = document.getElementById("save-complaint-btn");
   saveBtn.setAttribute("disabled", "true");
   saveBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Saving...`;
@@ -801,10 +1046,10 @@ function handleRegisterComplaint(e) {
     time: document.getElementById("complaint-time").value,
     citizenName: document.getElementById("citizen-name").value.trim(),
     mobileNumber: document.getElementById("mobile-number").value.trim(),
-    taluk: document.getElementById("taluk").value,
-    village: document.getElementById("village").value.trim(),
-    block: document.getElementById("block").value.trim(),
-    villagePanchayat: document.getElementById("village-panchayat").value.trim(),
+    taluk: taluk,
+    village: village,
+    block: block,
+    villagePanchayat: villagePanchayat,
     department: document.getElementById("department").value,
     description: document.getElementById("complaint-desc").value.trim(),
     priority: document.getElementById("priority").value,
@@ -1004,6 +1249,7 @@ function handleSearch(e) {
 
 function handleSearchReset() {
   document.getElementById("search-filter-form").reset();
+  populateLocationSelects();
   state.currentPage = 1;
   applyFiltersAndRenderTable();
   showToast("Filters reset.", "info");
@@ -1015,7 +1261,8 @@ function handleSearchReset() {
 function applyFiltersAndRenderTable() {
   const idQuery = document.getElementById("search-id").value.trim().toLowerCase();
   const mobileQuery = document.getElementById("search-mobile").value.trim().toLowerCase();
-  const villageQuery = document.getElementById("search-village").value.trim().toLowerCase();
+  const talukQuery = document.getElementById("search-taluk").value;
+  const villageQuery = document.getElementById("search-village").value;
   const deptQuery = document.getElementById("search-department").value;
   const statusQuery = document.getElementById("search-status").value;
   const dateQuery = document.getElementById("search-date").value;
@@ -1023,14 +1270,15 @@ function applyFiltersAndRenderTable() {
   state.filteredComplaints = state.complaints.filter(c => {
     const matchesId = idQuery === "" || c.id.toLowerCase().includes(idQuery);
     const matchesMobile = mobileQuery === "" || c.mobileNumber.toLowerCase().includes(mobileQuery);
-    const matchesVillage = villageQuery === "" || c.village.toLowerCase().includes(villageQuery);
+    const matchesTaluk = talukQuery === "" || c.taluk === talukQuery;
+    const matchesVillage = villageQuery === "" || c.village === villageQuery;
     const matchesDept = deptQuery === "" || c.department === deptQuery;
     const matchesStatus = statusQuery === "" || c.status === statusQuery;
     
     // Standardize date matching (Google Sheets stores YYYY-MM-DD)
     const matchesDate = dateQuery === "" || c.date === dateQuery;
     
-    return matchesId && matchesMobile && matchesVillage && matchesDept && matchesStatus && matchesDate;
+    return matchesId && matchesMobile && matchesTaluk && matchesVillage && matchesDept && matchesStatus && matchesDate;
   });
   
   document.getElementById("match-count").textContent = state.filteredComplaints.length;
@@ -1160,6 +1408,10 @@ function renderPaginationControls(totalEntries) {
 function openEditModal(complaintId) {
   const complaint = state.complaints.find(c => c.id === complaintId);
   if (!complaint) return;
+
+  const locationEntry = getLocationEntry(complaint.taluk, complaint.village);
+  const blockValue = locationEntry ? locationEntry.block : complaint.block || "";
+  const panchayatValue = locationEntry ? locationEntry.villagePanchayat : complaint.villagePanchayat || "";
   
   // Populate Modal Fields
   document.getElementById("modal-id").textContent = complaint.id;
@@ -1167,15 +1419,15 @@ function openEditModal(complaintId) {
   document.getElementById("modal-name").textContent = complaint.citizenName;
   document.getElementById("modal-mobile").textContent = complaint.mobileNumber;
   document.getElementById("modal-location").textContent = `${complaint.village}, ${complaint.taluk} Taluk`;
-  document.getElementById("modal-block").textContent = complaint.block || "-";
-  document.getElementById("modal-village-panchayat").textContent = complaint.villagePanchayat || "-";
+  document.getElementById("modal-block").textContent = blockValue || "-";
+  document.getElementById("modal-village-panchayat").textContent = panchayatValue || "-";
   document.getElementById("modal-department").textContent = complaint.department;
   document.getElementById("modal-desc").textContent = complaint.description;
   
   document.getElementById("modal-update-priority").value = complaint.priority;
   document.getElementById("modal-update-status").value = complaint.status;
-  document.getElementById("modal-update-block").value = complaint.block || "";
-  document.getElementById("modal-update-village-panchayat").value = complaint.villagePanchayat || "";
+  document.getElementById("modal-update-block").value = blockValue;
+  document.getElementById("modal-update-village-panchayat").value = panchayatValue;
   document.getElementById("modal-update-remarks").value = complaint.remarks || "";
   
   // Toggle overlay loading
