@@ -414,22 +414,22 @@
                         <div class="invalid-feedback">Please select a Taluk.</div>
                       </div>
                       <div class="col-md-6">
-                        <label for="village" class="form-label small fw-semibold text-secondary">Village</label>
-                        <input type="text" id="village" class="form-control border-secondary-subtle" placeholder="Enter village name" required>
-                        <div class="invalid-feedback">Please enter the village name.</div>
+                        <label for="block" class="form-label small fw-semibold text-secondary">Block</label>
+                        <select id="block" class="form-select border-secondary-subtle" required>
+                          <option value="" disabled selected>-- Select Block --</option>
+                        </select>
+                        <div class="invalid-feedback">Please select the block.</div>
                       </div>
                     </div>
                     <div class="row g-3 mb-4">
                       <div class="col-md-6">
-                        <label for="block" class="form-label small fw-semibold text-secondary">Block</label>
-                        <input type="text" id="block" class="form-control border-secondary-subtle" placeholder="Block will be auto-filled" required readonly>
-                        <div class="invalid-feedback">Please select the village to auto-fill the block.</div>
-                      </div>
-                      <div class="col-md-6">
                         <label for="village-panchayat" class="form-label small fw-semibold text-secondary">Village Panchayat</label>
-                        <input type="text" id="village-panchayat" class="form-control border-secondary-subtle" placeholder="Panchayat will be auto-filled" required readonly>
-                        <div class="invalid-feedback">Please select the village to auto-fill the village panchayat.</div>
+                        <select id="village-panchayat" class="form-select border-secondary-subtle" required>
+                          <option value="" disabled selected>-- Select Village Panchayat --</option>
+                        </select>
+                        <div class="invalid-feedback">Please select the village panchayat.</div>
                       </div>
+                      <input type="hidden" id="village" value="">
                     </div>
 
                     <!-- Department and Grievance Details Row -->
