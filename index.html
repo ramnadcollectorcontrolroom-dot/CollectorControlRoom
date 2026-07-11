@@ -337,6 +337,12 @@
                       <input type="text" id="api-url-input" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
                       <button id="save-api-url-btn" class="btn btn-primary" type="button">Save</button>
                     </div>
+                    <label for="location-master-url-input" class="form-label small fw-semibold text-secondary mt-2">Location Master URL</label>
+                    <div class="input-group input-group-sm">
+                      <input type="text" id="location-master-url-input" class="form-control" placeholder="https://docs.google.com/spreadsheets/.../export?format=csv">
+                      <button id="save-location-master-btn" class="btn btn-primary" type="button">Load</button>
+                    </div>
+                    <small id="location-master-status" class="text-muted font-xs d-block mt-1">Provide a Google Sheet, CSV, or Excel URL containing Taluk, Village, Block, and Village Panchayat columns.</small>
                     <button id="reset-demo-data-btn" class="btn btn-outline-secondary btn-sm w-100 mt-2 demo-reset-btn" type="button">
                       <i class="fa-solid fa-arrow-rotate-left me-1"></i> Reset Demo Data
                     </button>

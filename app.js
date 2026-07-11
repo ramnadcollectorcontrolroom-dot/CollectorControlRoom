@@ -11,6 +11,7 @@ const CONFIG = {
   SESSION_KEY: "rmd_session_active",
   DEPARTMENT_LIST_KEY: "rmd_department_list",
   LOCATION_MASTER_KEY: "rmd_location_master",
+  LOCATION_MASTER_URL_KEY: "rmd_location_master_url",
   LOCATION_MASTER_URL: "",
   DEPARTMENT_EXCEL_URL: "",
   DEFAULT_API_URL: "https://script.google.com/macros/s/AKfycbzE7HTJwqu4ygSYXG0ZGAklRiYetT00nzZbVeOfnTYCCmgrRtCx0Cg6FFj6ABNSbyPu/exec"
@@ -98,8 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
 function initApp() {
   // Load configuration
   const savedApiUrl = localStorage.getItem(CONFIG.API_URL_KEY);
+  const savedLocationMasterUrl = localStorage.getItem(CONFIG.LOCATION_MASTER_URL_KEY);
   state.apiUrl = savedApiUrl || CONFIG.DEFAULT_API_URL;
   document.getElementById("api-url-input").value = state.apiUrl;
+  document.getElementById("location-master-url-input").value = savedLocationMasterUrl || "";
 
   if (savedApiUrl) {
     state.isMockMode = false;
@@ -139,35 +142,191 @@ function initApp() {
   loadLocationMaster();
 }
 
+function handleLocationMasterUrlSave() {
+  const input = document.getElementById("location-master-url-input");
+  const value = input.value.trim();
+  if (value) {
+    localStorage.setItem(CONFIG.LOCATION_MASTER_URL_KEY, value);
+    showToast("Location master URL saved. Loading location data...", "success");
+  } else {
+    localStorage.removeItem(CONFIG.LOCATION_MASTER_URL_KEY);
+    showToast("Location master URL cleared.", "info");
+  }
+  loadLocationMaster();
+}
+
 function loadLocationMaster() {
   const savedLocations = localStorage.getItem(CONFIG.LOCATION_MASTER_KEY);
-  let master = [];
+  const savedMasterUrl = localStorage.getItem(CONFIG.LOCATION_MASTER_URL_KEY);
+  const configuredUrl = (window.LOCATION_MASTER_URL || CONFIG.LOCATION_MASTER_URL || savedMasterUrl || "").trim();
 
   if (savedLocations) {
     try {
       const parsed = JSON.parse(savedLocations);
       if (Array.isArray(parsed) && parsed.length) {
-        master = parsed;
+        applyLocationMaster(parsed);
+        return;
       }
     } catch (error) {
       console.warn("Failed to parse saved location master", error);
     }
   }
 
-  if (!master.length) {
-    master = DEFAULT_LOCATION_MASTER;
+  if (window.LOCATION_MASTER_DATA && Array.isArray(window.LOCATION_MASTER_DATA) && window.LOCATION_MASTER_DATA.length) {
+    applyLocationMaster(window.LOCATION_MASTER_DATA);
+    return;
   }
 
+  if (configuredUrl) {
+    fetchLocationMasterFromUrl(configuredUrl)
+      .then(master => {
+        if (Array.isArray(master) && master.length) {
+          applyLocationMaster(master);
+        } else {
+          showLocationMasterStatus("The configured URL did not return usable location rows. Falling back to the built-in sample master.");
+          applyLocationMaster(DEFAULT_LOCATION_MASTER);
+        }
+      })
+      .catch(() => {
+        showLocationMasterStatus("Unable to read the configured URL. Falling back to the built-in sample master.");
+        applyLocationMaster(DEFAULT_LOCATION_MASTER);
+      });
+    return;
+  }
+
+  applyLocationMaster(DEFAULT_LOCATION_MASTER);
+}
+
+function fetchLocationMasterFromUrl(url) {
+  return fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("HTTP error " + response.status);
+      }
+
+      const contentType = response.headers.get("content-type") || "";
+      const isBinary = contentType.includes("sheet") || contentType.includes("excel") || contentType.includes("octet-stream") || url.toLowerCase().includes("xlsx") || url.toLowerCase().includes("xls") || url.toLowerCase().includes("binary");
+
+      if (isBinary && typeof window.XLSX !== "undefined") {
+        return response.arrayBuffer().then(buffer => {
+          const workbook = window.XLSX.read(buffer, { type: "array" });
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          return window.XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+        });
+      }
+
+      return response.text().then(text => {
+        if (contentType.includes("json") || url.toLowerCase().includes("json")) {
+          const parsed = JSON.parse(text);
+          if (Array.isArray(parsed)) return parsed;
+          if (parsed && Array.isArray(parsed.rows)) return parsed.rows;
+          return [];
+        }
+
+        if (contentType.includes("csv") || url.toLowerCase().includes("csv") || url.toLowerCase().includes("export")) {
+          return parseLocationCsv(text);
+        }
+
+        if (typeof window.XLSX !== "undefined") {
+          try {
+            const workbook = window.XLSX.read(text, { type: "string" });
+            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            return window.XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+          } catch (error) {
+            return parseLocationCsv(text);
+          }
+        }
+
+        return parseLocationCsv(text);
+      });
+    });
+}
+
+function parseLocationCsv(text) {
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const next = text[i + 1];
+
+    if (char === '"') {
+      if (inQuotes && next === '"') {
+        cell += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === "," && !inQuotes) {
+      row.push(cell);
+      cell = "";
+    } else if ((char === "\n" || char === "\r") && !inQuotes) {
+      if (char === "\r" && next === "\n") {
+        i++;
+      }
+      row.push(cell);
+      if (row.some(value => value !== "")) {
+        rows.push(row);
+      }
+      row = [];
+      cell = "";
+    } else {
+      cell += char;
+    }
+  }
+
+  if (cell.length > 0 || row.length) {
+    row.push(cell);
+    if (row.some(value => value !== "")) {
+      rows.push(row);
+    }
+  }
+
+  if (!rows.length) return [];
+
+  const headers = rows[0].map(header => String(header).trim().toLowerCase());
+  return rows.slice(1).filter(row => row.some(value => String(value).trim())).map(row => {
+    const entry = {};
+    headers.forEach((header, index) => {
+      if (header === "taluk") entry.taluk = String(row[index] || "").trim();
+      if (header === "village") entry.village = String(row[index] || "").trim();
+      if (header === "block") entry.block = String(row[index] || "").trim();
+      if (header === "village panchayat" || header === "village panchayat name") entry.villagePanchayat = String(row[index] || "").trim();
+    });
+    return entry;
+  });
+}
+
+function applyLocationMaster(master) {
   state.locationMaster = normalizeLocationMaster(master);
   state.locationIndex = buildLocationIndex(state.locationMaster);
   state.talukOptions = Object.keys(state.locationIndex).sort((a, b) => a.localeCompare(b));
 
   populateLocationSelects();
 
+  if (state.locationMaster.length) {
+    showLocationMasterStatus(`Location master loaded with ${state.locationMaster.length} rows.`);
+  } else {
+    showLocationMasterStatus("Unable to load Location Master from the provided URL.");
+  }
+
   try {
     localStorage.setItem(CONFIG.LOCATION_MASTER_KEY, JSON.stringify(state.locationMaster));
+    const masterUrl = (window.LOCATION_MASTER_URL || CONFIG.LOCATION_MASTER_URL || localStorage.getItem(CONFIG.LOCATION_MASTER_URL_KEY) || "").trim();
+    if (masterUrl) {
+      localStorage.setItem(CONFIG.LOCATION_MASTER_URL_KEY, masterUrl);
+    }
   } catch (error) {
     console.warn("Unable to save location master locally", error);
+  }
+}
+
+function showLocationMasterStatus(message) {
+  const statusEl = document.getElementById("location-master-status");
+  if (statusEl) {
+    statusEl.textContent = message;
   }
 }
 
@@ -509,6 +668,9 @@ function setupEventListeners() {
     fetchData(); // Reload data
   });
 
+  // Location Master Button
+  document.getElementById("save-location-master-btn").addEventListener("click", handleLocationMasterUrlSave);
+
   // Reset Demo Data Button
   document.getElementById("reset-demo-data-btn").addEventListener("click", () => {
     resetDemoData();
@@ -803,6 +965,7 @@ function resetRegistrationForm() {
   form.reset();
   form.classList.remove("was-validated");
 
+  populateLocationSelects();
   const villageSelect = document.getElementById("village");
   if (villageSelect) {
     villageSelect.innerHTML = '<option value="" disabled selected>-- Select Village --</option>';
