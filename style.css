@@ -4,26 +4,26 @@
    ========================================================================== */
 
 :root {
-  --primary-color: #0a369d;
-  --primary-hover: #082c80;
-  --primary-light: #4c82f7;
-  --primary-bg: #eaf2ff;
+  --primary-color: #198754;
+  --primary-hover: #157347;
+  --primary-light: #63c087;
+  --primary-bg: #D1E7DD;
   
-  --dark-sidebar: #0f172a;
-  --dark-sidebar-hover: #1e293b;
-  --dark-sidebar-active: #1e3a8a;
+  --dark-sidebar: #14532D;
+  --dark-sidebar-hover: #166534;
+  --dark-sidebar-active: #198754;
   
-  --bg-light: #f8fafc;
-  --text-main: #1e293b;
+  --bg-light: #f5fbf7;
+  --text-main: #1f2937;
   --text-secondary: #64748b;
-  --border-color: #e2e8f0;
+  --border-color: #dbe7df;
   
-  --priority-high: #ef4444;
-  --priority-medium: #f59e0b;
-  --priority-low: #3b82f6;
+  --priority-high: #dc2626;
+  --priority-medium: #d97706;
+  --priority-low: #2563eb;
   
-  --status-pending: #f59e0b;
-  --status-inprogress: #0d9488;
+  --status-pending: #d97706;
+  --status-inprogress: #0f766e;
   --status-completed: #10b981;
 }
 
@@ -60,7 +60,7 @@ body {
 
 /* ==================== LOGIN STYLING ==================== */
 #login-view {
-  background: linear-gradient(135deg, #02153c 0%, #0a369d 100%);
+  background: linear-gradient(135deg, #14532D 0%, #198754 100%);
 }
 
 .login-card {
@@ -70,7 +70,7 @@ body {
 }
 
 .login-banner {
-  background: linear-gradient(135deg, #09318f 0%, #06236b 100%);
+  background: linear-gradient(135deg, #166534 0%, #14532D 100%);
   background-size: cover;
   position: relative;
 }
@@ -79,7 +79,7 @@ body {
   content: "";
   position: absolute;
   top: 0; right: 0; bottom: 0; left: 0;
-  background: radial-gradient(circle at 10% 20%, rgba(10, 54, 157, 0.2) 0%, rgba(2, 21, 60, 0.4) 90%);
+  background: radial-gradient(circle at 10% 20%, rgba(25, 135, 84, 0.2) 0%, rgba(20, 83, 45, 0.4) 90%);
 }
 
 .login-banner > * {
@@ -119,6 +119,60 @@ body {
   background-color: var(--primary-hover);
   border-color: var(--primary-hover);
   transform: translateY(-1px);
+}
+
+.btn-primary,
+.btn-outline-primary {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:not(:disabled):not(.disabled):active {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:not(:disabled):not(.disabled):active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #ffffff;
+}
+
+.bg-primary,
+.bg-primary-subtle,
+.text-primary,
+.text-primary-light {
+  transition: all 0.2s ease;
+}
+
+.bg-primary {
+  background-color: var(--primary-color) !important;
+}
+
+.bg-primary-subtle {
+  background-color: var(--primary-bg) !important;
+}
+
+.text-primary,
+.text-primary-light {
+  color: var(--primary-color) !important;
+}
+
+.badge.bg-primary {
+  background-color: var(--primary-color) !important;
 }
 
 .demo-reset-btn {
@@ -356,7 +410,7 @@ header.sticky-top {
 
 .form-control:focus, .form-select:focus {
   border-color: var(--primary-light);
-  box-shadow: 0 0 0 0.25rem rgba(10, 54, 157, 0.15);
+  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.15);
 }
 
 /* Toast styling overriding bootstrap defaults slightly */

@@ -9,11 +9,33 @@ const CONFIG = {
   API_URL_KEY: "rmd_api_url",
   COMPLAINTS_KEY: "rmd_complaints",
   SESSION_KEY: "rmd_session_active",
+  DEPARTMENT_LIST_KEY: "rmd_department_list",
+  DEPARTMENT_EXCEL_URL: "",
   DEFAULT_API_URL: "https://script.google.com/macros/s/AKfycbzE7HTJwqu4ygSYXG0ZGAklRiYetT00nzZbVeOfnTYCCmgrRtCx0Cg6FFj6ABNSbyPu/exec"
-  
-  
-  
 };
+
+const DEFAULT_DEPARTMENT_OPTIONS = [
+  "Highways",
+  "National Highways",
+  "Fire and Rescue",
+  "Agriculture",
+  "Fisheries",
+  "Horticulture",
+  "DSO",
+  "AD Town Panchayat",
+  "TN-EB",
+  "Education",
+  "Municipality",
+  "PWD&WRD",
+  "Tresury",
+  "Co-Operative",
+  "Forest",
+  "Animal Husbandry",
+  "Wildlife warden",
+  "TNSTC",
+  "TWAD- RWS",
+  "TWAD-Cauvery Water"
+];
 
 // Application State
 let state = {
@@ -23,6 +45,7 @@ let state = {
   isMockMode: true,
   currentPage: 1,
   pageSize: 10,
+  departmentOptions: [],
   charts: {
     status: null,
     priority: null,
@@ -83,6 +106,169 @@ function initApp() {
   
   // Setup Event Listeners
   setupEventListeners();
+
+  // Load Department dropdown options
+  loadDepartmentOptions();
+}
+
+function loadDepartmentOptions() {
+  const formSelect = document.getElementById("department");
+  const searchSelect = document.getElementById("search-department");
+
+  if (!formSelect || !searchSelect) {
+    return;
+  }
+
+  const savedDepartments = localStorage.getItem(CONFIG.DEPARTMENT_LIST_KEY);
+  if (savedDepartments) {
+    try {
+      const parsed = JSON.parse(savedDepartments);
+      if (Array.isArray(parsed) && parsed.length) {
+        populateDepartmentOptions(parsed);
+        return;
+      }
+    } catch (error) {
+      console.warn("Failed to parse saved department list", error);
+    }
+  }
+
+  const excelUrl = (window.DEPARTMENT_EXCEL_URL || CONFIG.DEPARTMENT_EXCEL_URL || "").trim();
+  if (excelUrl && typeof window.XLSX !== "undefined") {
+    fetch(excelUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("HTTP error " + response.status);
+        }
+        return response.arrayBuffer();
+      })
+      .then(buffer => {
+        const workbook = window.XLSX.read(buffer, { type: "array" });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rows = window.XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
+
+        let designationColIndex = -1;
+        if (rows.length) {
+          const headerRow = rows[0] || [];
+          headerRow.forEach((cell, index) => {
+            if (String(cell).trim().toLowerCase() === "designation") {
+              designationColIndex = index;
+            }
+          });
+        }
+
+        const values = [];
+        if (designationColIndex >= 0) {
+          rows.slice(1).forEach(row => {
+            const value = row[designationColIndex];
+            if (value !== undefined && value !== null) {
+              const trimmed = String(value).trim();
+              if (trimmed) {
+                values.push(trimmed);
+              }
+            }
+          });
+        }
+
+        const options = normalizeDepartmentOptions(values);
+        if (options.length) {
+          persistDepartmentOptions(options);
+          populateDepartmentOptions(options);
+        } else {
+          showDepartmentLoadError();
+        }
+      })
+      .catch(() => {
+        showDepartmentLoadError();
+      });
+    return;
+  }
+
+  showDepartmentLoadError();
+}
+
+function normalizeDepartmentOptions(values) {
+  const uniqueValues = [...new Set((values || [])
+    .map(value => String(value).trim())
+    .filter(Boolean))];
+
+  uniqueValues.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
+  return uniqueValues;
+}
+
+function populateDepartmentOptions(options) {
+  const normalizedOptions = normalizeDepartmentOptions(options);
+  state.departmentOptions = normalizedOptions;
+
+  const formSelect = document.getElementById("department");
+  const searchSelect = document.getElementById("search-department");
+
+  if (!formSelect || !searchSelect) {
+    return;
+  }
+
+  if (!normalizedOptions.length) {
+    showDepartmentLoadError();
+    return;
+  }
+
+  formSelect.innerHTML = "";
+  searchSelect.innerHTML = "";
+
+  const formPlaceholder = document.createElement("option");
+  formPlaceholder.value = "";
+  formPlaceholder.textContent = "-- Select Department --";
+  formPlaceholder.disabled = true;
+  formPlaceholder.selected = true;
+  formSelect.appendChild(formPlaceholder);
+
+  const searchPlaceholder = document.createElement("option");
+  searchPlaceholder.value = "";
+  searchPlaceholder.textContent = "All Departments";
+  searchSelect.appendChild(searchPlaceholder);
+
+  normalizedOptions.forEach(optionValue => {
+    const formOption = document.createElement("option");
+    formOption.value = optionValue;
+    formOption.textContent = optionValue;
+    formSelect.appendChild(formOption.cloneNode(true));
+
+    const searchOption = document.createElement("option");
+    searchOption.value = optionValue;
+    searchOption.textContent = optionValue;
+    searchSelect.appendChild(searchOption);
+  });
+}
+
+function showDepartmentLoadError() {
+  const formSelect = document.getElementById("department");
+  const searchSelect = document.getElementById("search-department");
+
+  if (!formSelect || !searchSelect) {
+    return;
+  }
+
+  formSelect.innerHTML = "";
+  searchSelect.innerHTML = "";
+
+  const formOption = document.createElement("option");
+  formOption.value = "";
+  formOption.textContent = "Unable to load Department List";
+  formOption.disabled = true;
+  formOption.selected = true;
+  formSelect.appendChild(formOption);
+
+  const searchOption = document.createElement("option");
+  searchOption.value = "";
+  searchOption.textContent = "Unable to load Department List";
+  searchSelect.appendChild(searchOption);
+}
+
+function persistDepartmentOptions(options) {
+  try {
+    localStorage.setItem(CONFIG.DEPARTMENT_LIST_KEY, JSON.stringify(normalizeDepartmentOptions(options)));
+  } catch (error) {
+    console.warn("Unable to save department list locally", error);
+  }
 }
 
 /**
