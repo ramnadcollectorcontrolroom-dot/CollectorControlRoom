@@ -454,7 +454,13 @@
                       </div>
                       <div class="col-12">
                         <label for="complaint-desc" class="form-label small fw-semibold text-secondary">Complaint Description</label>
-                        <textarea id="complaint-desc" class="form-control border-secondary-subtle" rows="4" placeholder="Enter detailed complaint description" required></textarea>
+                        <div class="position-relative">
+                          <textarea id="complaint-desc" class="form-control border-secondary-subtle pe-5" rows="4" placeholder="Enter complaint description in Tamil, English, or Romanized Tamil" required lang="ta" dir="auto" spellcheck="true" inputmode="text"></textarea>
+                          <button type="button" id="voice-dictation-btn" class="btn btn-outline-secondary btn-sm position-absolute top-0 end-0 mt-2 me-2" title="Dictate complaint description" aria-label="Dictate complaint description">
+                            <i class="fa-solid fa-microphone"></i>
+                          </button>
+                        </div>
+                        <div class="small text-muted mt-1">Type in Tamil or English. Romanized Tamil will be converted to Tamil as you type, or use voice dictation.</div>
                         <div class="invalid-feedback">Please enter the complaint description.</div>
                       </div>
                       <div class="col-12">

@@ -174,16 +174,16 @@ function loadDepartmentOptions() {
           persistDepartmentOptions(options);
           populateDepartmentOptions(options);
         } else {
-          showDepartmentLoadError();
+          populateDepartmentOptions(DEFAULT_DEPARTMENT_OPTIONS);
         }
       })
       .catch(() => {
-        showDepartmentLoadError();
+        populateDepartmentOptions(DEFAULT_DEPARTMENT_OPTIONS);
       });
     return;
   }
 
-  showDepartmentLoadError();
+  populateDepartmentOptions(DEFAULT_DEPARTMENT_OPTIONS);
 }
 
 function normalizeDepartmentOptions(values) {
@@ -353,6 +353,17 @@ function setupEventListeners() {
     resetRegistrationForm();
     showToast("Form cleared.", "info");
   });
+
+  // Complaint Description transliteration support
+  const complaintDesc = document.getElementById("complaint-desc");
+  if (complaintDesc) {
+    complaintDesc.addEventListener("input", handleComplaintDescriptionInput);
+  }
+
+  const voiceDictationBtn = document.getElementById("voice-dictation-btn");
+  if (voiceDictationBtn) {
+    voiceDictationBtn.addEventListener("click", toggleVoiceDictation);
+  }
   
   // Form Print Draft Button
   document.getElementById("print-form-btn").addEventListener("click", () => {
@@ -636,6 +647,140 @@ function resetRegistrationForm() {
 /**
  * Handles Form Submission
  */
+function handleComplaintDescriptionInput(event) {
+  const textarea = event.target;
+  if (!textarea || textarea.id !== "complaint-desc") return;
+
+  const value = textarea.value;
+  if (!value || /[\u0B80-\u0BFF]/.test(value)) {
+    return;
+  }
+
+  const transliterated = transliterateToTamil(value);
+  if (transliterated !== value) {
+    textarea.value = transliterated;
+  }
+}
+
+function transliterateToTamil(text) {
+  if (!text) return "";
+
+  const consonantMap = {
+    k: "க", g: "க", c: "ச", ch: "ச", j: "ஜ", t: "த", th: "த", d: "த", n: "ந", p: "ப", ph: "ப", b: "ப", m: "ம",
+    y: "ய", r: "ர", l: "ல", v: "வ", w: "வ", s: "ச", sh: "ஷ", h: "ஹ", z: "ழ", zh: "ழ", ng: "ங", nj: "ஞ", rr: "ற", ll: "ள"
+  };
+
+  const vowelMap = {
+    a: "", aa: "ா", i: "ி", ii: "ீ", u: "ு", uu: "ூ", e: "ெ", ee: "ே", ai: "ை", o: "ொ", oo: "ோ", au: "ௌ"
+  };
+
+  const specialMap = {
+    "th": "த்", "sh": "ஷ்", "ch": "ச்", "ng": "ங்", "nj": "ஞ்", "rr": "ற்", "ll": "ள்", "kk": "க்", "pp": "ப்", "tt": "த்", "dd": "த்"
+  };
+
+  let result = "";
+  let remaining = text.trim();
+
+  while (remaining.length > 0) {
+    let matched = false;
+
+    for (const pattern of Object.keys(specialMap).sort((a, b) => b.length - a.length)) {
+      if (remaining.toLowerCase().startsWith(pattern)) {
+        result += specialMap[pattern];
+        remaining = remaining.slice(pattern.length);
+        matched = true;
+        break;
+      }
+    }
+
+    if (matched) continue;
+
+    const char = remaining.charAt(0);
+    const lowerChar = char.toLowerCase();
+
+    if (/[a-zA-Z]/.test(char)) {
+      if (vowelMap[lowerChar]) {
+        result += vowelMap[lowerChar];
+        remaining = remaining.slice(1);
+      } else if (consonantMap[lowerChar]) {
+        result += consonantMap[lowerChar];
+        remaining = remaining.slice(1);
+      } else {
+        result += char;
+        remaining = remaining.slice(1);
+      }
+    } else {
+      result += char;
+      remaining = remaining.slice(1);
+    }
+  }
+
+  return result.replace(/\s+/g, " ").trim();
+}
+
+function toggleVoiceDictation() {
+  const textarea = document.getElementById("complaint-desc");
+  const button = document.getElementById("voice-dictation-btn");
+
+  if (!textarea || !button) return;
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    showToast("Speech recognition is not supported in this browser.", "info");
+    return;
+  }
+
+  if (window.__rmdVoiceRecognition) {
+    window.__rmdVoiceRecognition.stop();
+    window.__rmdVoiceRecognition = null;
+    button.classList.remove("btn-success");
+    button.classList.add("btn-outline-secondary");
+    button.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = "ta-IN";
+  recognition.interimResults = true;
+  recognition.continuous = false;
+
+  recognition.onstart = () => {
+    button.classList.remove("btn-outline-secondary");
+    button.classList.add("btn-success");
+    button.innerHTML = '<i class="fa-solid fa-microphone-lines"></i>';
+  };
+
+  recognition.onresult = (event) => {
+    const transcript = Array.from(event.results)
+      .map(result => result[0].transcript)
+      .join(" ");
+
+    if (event.results[event.results.length - 1].isFinal) {
+      textarea.value = (textarea.value + " " + transcript).trim();
+      handleComplaintDescriptionInput({ target: textarea });
+    } else {
+      textarea.value = (textarea.value + " " + transcript).trim();
+    }
+  };
+
+  recognition.onerror = () => {
+    showToast("Voice recognition failed. Please try again.", "error");
+    button.classList.remove("btn-success");
+    button.classList.add("btn-outline-secondary");
+    button.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+  };
+
+  recognition.onend = () => {
+    window.__rmdVoiceRecognition = null;
+    button.classList.remove("btn-success");
+    button.classList.add("btn-outline-secondary");
+    button.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+  };
+
+  window.__rmdVoiceRecognition = recognition;
+  recognition.start();
+}
+
 function handleRegisterComplaint(e) {
   e.preventDefault();
   const form = document.getElementById("register-complaint-form");
