@@ -4,27 +4,27 @@
    ========================================================================== */
 
 :root {
-  --primary-color: #198754;
-  --primary-hover: #157347;
-  --primary-light: #63c087;
-  --primary-bg: #D1E7DD;
+  --primary-color: #1b5e20;
+  --primary-hover: #144d1a;
+  --primary-light: #4caf50;
+  --primary-bg: #e8f5e9;
   
-  --dark-sidebar: #14532D;
-  --dark-sidebar-hover: #166534;
-  --dark-sidebar-active: #198754;
+  --dark-sidebar: #0f3d1a;
+  --dark-sidebar-hover: #165425;
+  --dark-sidebar-active: #1b5e20;
   
-  --bg-light: #f5fbf7;
-  --text-main: #1f2937;
-  --text-secondary: #64748b;
-  --border-color: #dbe7df;
+  --bg-light: #f7fbf8;
+  --text-main: #1f2933;
+  --text-secondary: #52606d;
+  --border-color: #d7e3d9;
   
-  --priority-high: #dc2626;
-  --priority-medium: #d97706;
-  --priority-low: #2563eb;
+  --priority-high: #b91c1c;
+  --priority-medium: #b45309;
+  --priority-low: #1d4ed8;
   
-  --status-pending: #d97706;
+  --status-pending: #b45309;
   --status-inprogress: #0f766e;
-  --status-completed: #10b981;
+  --status-completed: #15803d;
 }
 
 /* Global Styles */
@@ -34,6 +34,7 @@ body {
   background-color: var(--bg-light);
   min-height: 100vh;
   overflow-x: hidden;
+  letter-spacing: 0.01em;
 }
 
 .font-outfit {
@@ -60,7 +61,7 @@ body {
 
 /* ==================== LOGIN STYLING ==================== */
 #login-view {
-  background: linear-gradient(135deg, #14532D 0%, #198754 100%);
+  background: linear-gradient(135deg, #0f3d1a 0%, #1b5e20 55%, #2e7d32 100%);
 }
 
 .login-card {
@@ -70,7 +71,7 @@ body {
 }
 
 .login-banner {
-  background: linear-gradient(135deg, #166534 0%, #14532D 100%);
+  background: linear-gradient(135deg, #144d1a 0%, #0f3d1a 100%);
   background-size: cover;
   position: relative;
 }
@@ -79,7 +80,7 @@ body {
   content: "";
   position: absolute;
   top: 0; right: 0; bottom: 0; left: 0;
-  background: radial-gradient(circle at 10% 20%, rgba(25, 135, 84, 0.2) 0%, rgba(20, 83, 45, 0.4) 90%);
+  background: radial-gradient(circle at 10% 20%, rgba(27, 94, 32, 0.2) 0%, rgba(15, 61, 26, 0.45) 90%);
 }
 
 .login-banner > * {
@@ -286,6 +287,7 @@ header.sticky-top {
   transition: all 0.25s ease;
   position: relative;
   background-color: #ffffff;
+  border: 1px solid var(--border-color);
 }
 
 .metric-card:hover {
@@ -340,6 +342,7 @@ header.sticky-top {
 .table thead th {
   font-weight: 600;
   letter-spacing: 0.03em;
+  background-color: #f3f7f4;
 }
 
 .table tbody tr {
@@ -410,7 +413,7 @@ header.sticky-top {
 
 .form-control:focus, .form-select:focus {
   border-color: var(--primary-light);
-  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.15);
+  box-shadow: 0 0 0 0.25rem rgba(27, 94, 32, 0.15);
 }
 
 /* Toast styling overriding bootstrap defaults slightly */
