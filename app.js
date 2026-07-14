@@ -1077,6 +1077,24 @@ function setupEventListeners() {
       navigateTo(target);
     });
   });
+
+  document.getElementById("village")
+.addEventListener("change", handleVillageChange);
+
+  const talukSelect = document.getElementById("taluk");
+if (talukSelect) {
+    talukSelect.addEventListener("change", handleTalukChange);
+}
+
+const blockSelect = document.getElementById("block");
+if (blockSelect) {
+    blockSelect.addEventListener("change", handleBlockChange);
+}
+
+const villagePanchayat = document.getElementById("village-panchayat");
+if (villagePanchayat) {
+    villagePanchayat.addEventListener("change", handleVillagePanchayatChange);
+}
   
   // Toggle Sidebar Menu
   document.getElementById("toggle-sidebar-btn").addEventListener("click", () => {
@@ -1171,7 +1189,35 @@ function setupEventListeners() {
     printComplaintReceipt(currentId);
   });
 }
+function handleVillageChange() {
 
+    const taluk = document.getElementById("taluk").value;
+    const block = document.getElementById("block").value;
+    const village = document.getElementById("village").value;
+
+    const panchayat = document.getElementById("village-panchayat");
+
+    panchayat.innerHTML =
+        '<option value="">Select Village Panchayat</option>';
+
+    const rows = state.locationMaster.filter(x =>
+        x.taluk === taluk &&
+        x.block === block &&
+        x.village === village
+    );
+
+    rows.forEach(r => {
+
+        panchayat.add(
+            new Option(
+                r.villagePanchayat,
+                r.villagePanchayat
+            )
+        );
+
+    });
+
+}
 /* ==================== AUTHENTICATION FLOW ==================== */
 function handleLogin(e) {
   e.preventDefault();
@@ -1583,26 +1629,55 @@ function toggleVoiceDictation() {
   recognition.start();
 }
 
+// function handleTalukChange() {
+//   const talukSelect = document.getElementById(taluk);
+//   const blockSelect = document.getElementById(block);
+//   const panchayatSelect = document.getElementById("village-panchayat");
+//   const hiddenVillage = document.getElementById(village);
+//   const selectedTaluk = talukSelect.value;
+
+//   if (blockSelect) {
+//     blockSelect.innerHTML = '<option value="" disabled selected>-- Select Block --</option>';
+//   }
+//   if (panchayatSelect) {
+//     panchayatSelect.innerHTML = '<option value="" disabled selected>-- Select Village Panchayat --</option>';
+//   }
+//   if (hiddenVillage) {
+//     hiddenVillage.value = "";
+//   }
+
+//   if (!selectedTaluk) {
+//     return;
+//   }
+
 function handleTalukChange() {
-  const talukSelect = document.getElementById(taluk);
-  const blockSelect = document.getElementById(block);
-  const panchayatSelect = document.getElementById("village-panchayat");
-  const hiddenVillage = document.getElementById(village);
-  const selectedTaluk = talukSelect.value;
 
-  if (blockSelect) {
-    blockSelect.innerHTML = '<option value="" disabled selected>-- Select Block --</option>';
-  }
-  if (panchayatSelect) {
-    panchayatSelect.innerHTML = '<option value="" disabled selected>-- Select Village Panchayat --</option>';
-  }
-  if (hiddenVillage) {
-    hiddenVillage.value = "";
-  }
+    const talukSelect = document.getElementById("taluk");
+    const blockSelect = document.getElementById("block");
+    const villageSelect = document.getElementById("village");
+    const panchayatSelect = document.getElementById("village-panchayat");
 
-  if (!selectedTaluk) {
-    return;
-  }
+    const selectedTaluk = talukSelect.value;
+
+    blockSelect.innerHTML = '<option value="">Select Block</option>';
+    villageSelect.innerHTML = '<option value="">Select Village</option>';
+    panchayatSelect.innerHTML = '<option value="">Select Village Panchayat</option>';
+
+    if (!selectedTaluk) return;
+
+    const rows = state.locationMaster.filter(x => x.taluk === selectedTaluk);
+
+    [...new Set(rows.map(x => x.block))]
+        .sort()
+        .forEach(block => {
+
+            blockSelect.add(
+                new Option(block, block)
+            );
+
+        });
+
+}
 
   const blocks = [...new Set(state.locationMaster.filter(item => item.taluk === selectedTaluk).map(item => item.block).filter(Boolean))].sort((a, b) => a.localeCompare(b));
   blocks.forEach(block => {
@@ -1611,40 +1686,66 @@ function handleTalukChange() {
     option.textContent = block;
     blockSelect.appendChild(option);
   });
-}
+
+
+// function handleBlockChange() {
+//   const blockSelect = document.getElementById(block);
+//   const panchayatSelect = document.getElementById("village-panchayat");
+//   const hiddenVillage = document.getElementById(village);
+//   const selectedTaluk = document.getElementById(taluk).value;
+//   const selectedBlock = blockSelect.value;
+
+//   if (panchayatSelect) {
+//     panchayatSelect.innerHTML = '<option value="" disabled selected>-- Select Village Panchayat --</option>';
+//   }
+//   if (hiddenVillage) {
+//     hiddenVillage.value = "";
+//   }
+
+//   if (!selectedTaluk || !selectedBlock) {
+//     return;
+//   }
+
+//   const panchayats = [...new Set(state.locationMaster.filter(item => item.taluk === selectedTaluk && item.block === selectedBlock).map(item => item.villagePanchayat).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+//   panchayats.forEach(panchayat => {
+//     const option = document.createElement("option");
+//     option.value = panchayat;
+//     option.textContent = panchayat;
+//     panchayatSelect.appendChild(option);
+//   });
+// }
 
 function handleBlockChange() {
-  const blockSelect = document.getElementById(block);
-  const panchayatSelect = document.getElementById("village-panchayat");
-  const hiddenVillage = document.getElementById(village);
-  const selectedTaluk = document.getElementById(taluk).value;
-  const selectedBlock = blockSelect.value;
 
-  if (panchayatSelect) {
-    panchayatSelect.innerHTML = '<option value="" disabled selected>-- Select Village Panchayat --</option>';
-  }
-  if (hiddenVillage) {
-    hiddenVillage.value = "";
-  }
+    const taluk = document.getElementById("taluk").value;
+    const block = document.getElementById("block").value;
 
-  if (!selectedTaluk || !selectedBlock) {
-    return;
-  }
+    const village = document.getElementById("village");
+    const panchayat = document.getElementById("village-panchayat");
 
-  const panchayats = [...new Set(state.locationMaster.filter(item => item.taluk === selectedTaluk && item.block === selectedBlock).map(item => item.villagePanchayat).filter(Boolean))].sort((a, b) => a.localeCompare(b));
-  panchayats.forEach(panchayat => {
-    const option = document.createElement("option");
-    option.value = panchayat;
-    option.textContent = panchayat;
-    panchayatSelect.appendChild(option);
-  });
+    village.innerHTML = '<option value="">Select Village</option>';
+    panchayat.innerHTML = '<option value="">Select Village Panchayat</option>';
+
+    const rows = state.locationMaster.filter(x =>
+        x.taluk === taluk &&
+        x.block === block
+    );
+
+    [...new Set(rows.map(x => x.village))]
+        .sort()
+        .forEach(v => {
+
+            village.add(new Option(v, v));
+
+        });
+
 }
 
 function handleVillagePanchayatChange() {
-  const selectedTaluk = document.getElementById(taluk).value;
-  const selectedBlock = document.getElementById(block).value;
+  const selectedTaluk = document.getElementById("taluk").value;
+  const selectedBlock = document.getElementById("block").value;
   const selectedPanchayat = document.getElementById("village-panchayat").value;
-  const hiddenVillage = document.getElementById(village);
+  const hiddenVillage = document.getElementById("village");
 
   if (hiddenVillage) {
     hiddenVillage.value = "";
