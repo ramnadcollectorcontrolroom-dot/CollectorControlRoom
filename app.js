@@ -78,67 +78,67 @@ const DEFAULT_LOCATION_MASTER = [
   { taluk: "Ramanathapuram", village: "Kalanikudi", block: "Ramanathapuram", villagePanchayat: "Kalanikudi" },
   { taluk: "Rameswaram", village: "Rameswaram Town", block: "Rameswaram", villagePanchayat: "Rameswaram Town" },
   { taluk: "Rameswaram", village: "Pamban", block: "Rameswaram", villagePanchayat: "Pamban" },
-  { taluk: "Tiruvadanai", "village": "Tottamangalam", "block": "Tiruvadanai", "villagePanchayat": "Tottamangalam" },
-  { taluk: "Tiruvadanai", "village": "Tiruvadanai", "block": "Tiruvadanai", "villagePanchayat": "Tiruvadanai" },
-  { taluk: "Tiruvadanai", "village": "Arasur", "block": "Tiruvadanai", "villagePanchayat": "Arasur" },
-  { taluk: "Tiruvadanai", "village": "Attur", "block": "Tiruvadanai", "villagePanchayat": "Attur" },
-  { taluk: "Tiruvadanai", "village": "Parur", "block": "Tiruvadanai", "villagePanchayat": "Parur" },
-  { taluk: "Tiruvadanai", "village": "Oyikkottai", "block": "Tiruvadanai", "villagePanchayat": "Oyikkottai" },
-  { taluk: "Tiruvadanai", "village": "Nagini", "block": "Tiruvadanai", "villagePanchayat": "Nagini" },
-  { taluk: "Tiruvadanai", "village": "Ilayattanvayal", "block": "Tiruvadanai", "villagePanchayat": "Ilayattanvayal" },
-  { taluk: "Tiruvadanai", "village": "Pandukudi", "block": "Tiruvadanai", "villagePanchayat": "Pandukudi" },
-  { taluk: "Tiruvadanai", "village": "Kiliyur", "block": "Tiruvadanai", "villagePanchayat": "Kiliyur" },
-  { taluk: "Tiruvadanai", "village": "Anjukottai", "block": "Tiruvadanai", "villagePanchayat": "Anjukottai" },
-  { taluk: "Tiruvadanai", "village": "Kadambakudi", "block": "Tiruvadanai", "villagePanchayat": "Kadambakudi" },
-  { taluk: "Tiruvadanai", "village": "Mavur", "block": "Tiruvadanai", "villagePanchayat": "Mavur" },
-  { taluk: "Tiruvadanai", "village": "Adiyur", "block": "Tiruvadanai", "villagePanchayat": "Adiyur" },
-  { taluk: "Tiruvadanai", "village": "Neyvayal", "block": "Tiruvadanai", "villagePanchayat": "Neyvayal" },
-  { taluk: "Tiruvadanai", "village": "Tuttakudi", "block": "Tiruvadanai", "villagePanchayat": "Tuttakudi" },
-  { taluk: "Tiruvadanai", "village": "Palangulam", "block": "Tiruvadanai", "villagePanchayat": "Palangulam" },
-  { taluk: "Tiruvadanai", "village": "Kadambur", "block": "Tiruvadanai", "villagePanchayat": "Kadambur" },
-  { taluk: "Tiruvadanai", "village": "Nirkundram", "block": "Tiruvadanai", "villagePanchayat": "Nirkundram" },
-  { taluk: "Tiruvadanai", "village": "Kattavilagam", "block": "Tiruvadanai", "villagePanchayat": "Kattavilagam" },
-  { taluk: "Tiruvadanai", "village": "Paganur", "block": "Tiruvadanai", "villagePanchayat": "Paganur" },
-  { taluk: "Tiruvadanai", "village": "Kukkudi", "block": "Tiruvadanai", "villagePanchayat": "Kukkudi" },
-  { taluk: "Tiruvadanai", "village": "Mangalakkudi", "block": "Tiruvadanai", "villagePanchayat": "Mangalakkudi" },
-  { taluk: "Tiruvadanai", "village": "Sirumalaikkottai", "block": "Tiruvadanai", "villagePanchayat": "Sirumalaikkottai" },
-  { taluk: "Tiruvadanai", "village": "Kattimangalam", "block": "Tiruvadanai", "villagePanchayat": "Kattimangalam" },
-  { taluk: "Tiruvadanai", "village": "Panichchakudi", "block": "Tiruvadanai", "villagePanchayat": "Panichchakudi" },
-  { taluk: "Tiruvadanai", "village": "Chittamangalam", "block": "Tiruvadanai", "villagePanchayat": "Chittamangalam" },
-  { taluk: "Tiruvadanai", "village": "Nilamalagiyamangalam", "block": "Tiruvadanai", "villagePanchayat": "Nilamalagiyamangalam" },
-  { taluk: "Tiruvadanai", "village": "Sirukambayur", "block": "Tiruvadanai", "villagePanchayat": "Sirukambayur" },
-  { taluk: "Tiruvadanai", "village": "Orur", "block": "Tiruvadanai", "villagePanchayat": "Orur" },
-  { taluk: "Tiruvadanai", "village": "Marungur", "block": "Tiruvadanai", "villagePanchayat": "Marungur" },
-  { taluk: "Tiruvadanai", "village": "Pullur", "block": "Tiruvadanai", "villagePanchayat": "Pullur" },
-  { taluk: "Tiruvadanai", "village": "Akkalur", "block": "Tiruvadanai", "villagePanchayat": "Akkalur" },
-  { taluk: "Tiruvadanai", "village": "Nagarikattan", "block": "Tiruvadanai", "villagePanchayat": "Nagarikattan" },
-  { taluk: "Tiruvadanai", "village": "Mallanur", "block": "Tiruvadanai", "villagePanchayat": "Mallanur" },
-  { taluk: "Tiruvadanai", "village": "Vattanam", "block": "Tiruvadanai", "villagePanchayat": "Vattanam" },
-  { taluk: "Tiruvadanai", "village": "Kaliyanagari", "block": "Tiruvadanai", "villagePanchayat": "Kaliyanagari" },
-  { taluk: "Tiruvadanai", "village": "Machchur", "block": "Tiruvadanai", "villagePanchayat": "Machchur" },
-  { taluk: "Tiruvadanai", "village": "Odavayal", "block": "Tiruvadanai", "villagePanchayat": "Odavayal" },
-  { taluk: "Tiruvadanai", "village": "Kodippangu", "block": "Tiruvadanai", "villagePanchayat": "Kodippangu" },
-  { taluk: "Tiruvadanai", "village": "Muthuramalingapattanam", "block": "Tiruvadanai", "villagePanchayat": "Muthuramalingapattanam" },
-  { taluk: "Tiruvadanai", "village": "Telur", "block": "Tiruvadanai", "villagePanchayat": "Telur" },
-  { taluk: "Tiruvadanai", "village": "Karungalakkudi", "block": "Tiruvadanai", "villagePanchayat": "Karungalakkudi" },
-  { taluk: "Tiruvadanai", "village": "Velangudi", "block": "Tiruvadanai", "villagePanchayat": "Velangudi" },
-  { taluk: "Tiruvadanai", "village": "Tondi", "block": "Tiruvadanai", "villagePanchayat": "Tondi" },
-  { taluk: "Tiruvadanai", "village": "Chinna Tondi", "block": "Tiruvadanai", "villagePanchayat": "Chinna Tondi" },
-  { taluk: "Tiruvadanai", "village": "Thalirmarungur", "block": "Tiruvadanai", "villagePanchayat": "Thalirmarungur" },
-  { taluk: "Tiruvadanai", "village": "Kadangudi", "block": "Tiruvadanai", "villagePanchayat": "Kadangudi" },
-  { taluk: "Tiruvadanai", "village": "Sekkantidal", "block": "Tiruvadanai", "villagePanchayat": "Sekkantidal" },
-  { taluk: "Tiruvadanai", "village": "Kil Arumbur", "block": "Tiruvadanai", "villagePanchayat": "Kil Arumbur" },
-  { taluk: "Tiruvadanai", "village": "Kil Panaiyur", "block": "Tiruvadanai", "villagePanchayat": "Kil Panaiyur" },
-  { taluk: "Tiruvadanai", "village": "Pattamangalam", "block": "Tiruvadanai", "villagePanchayat": "Pattamangalam" },
-  { taluk: "Tiruvadanai", "village": "Kulattur", "block": "Tiruvadanai", "villagePanchayat": "Kulattur" },
-  { taluk: "Tiruvadanai", "village": "Tiruvetriyur", "block": "Tiruvadanai", "villagePanchayat": "Tiruvetriyur" },
-  { taluk: "Tiruvadanai", "village": "Kadambanendal", "block": "Tiruvadanai", "villagePanchayat": "Kadambanendal" },
-  { taluk: "Tiruvadanai", "village": "Mugiltagam", "block": "Tiruvadanai", "villagePanchayat": "Mugiltagam" },
-  { taluk: "Tiruvadanai", "village": "Nambutalai", "block": "Tiruvadanai", "villagePanchayat": "Nambutalai" },
-  { taluk: "Tiruvadanai", "village": "Kanattankadu", "block": "Tiruvadanai", "villagePanchayat": "Kanattankadu" },
-  { taluk: "Tiruvadanai", "village": "Puduppattanam", "block": "Tiruvadanai", "villagePanchayat": "Puduppattanam" },
-  { taluk: "Tiruvadanai", "village": "A.Manakkudi", "block": "Tiruvadanai", "villagePanchayat": "A.Manakkudi" },
-  { taluk: "Tiruvadanai", "village": "Alikkudi", "block": "Tiruvadanai", "villagePanchayat": "Alikkudi" },
+  { taluk: "Tiruvadanai", village: "Tottamangalam", block: "Tiruvadanai", villagePanchayat: "Tottamangalam" },
+  { taluk: "Tiruvadanai", village: "Tiruvadanai", block: "Tiruvadanai", villagePanchayat: "Tiruvadanai" },
+  { taluk: "Tiruvadanai", village: "Arasur", block: "Tiruvadanai", villagePanchayat: "Arasur" },
+  { taluk: "Tiruvadanai", village: "Attur", block: "Tiruvadanai", villagePanchayat: "Attur" },
+  { taluk: "Tiruvadanai", village: "Parur", block: "Tiruvadanai", villagePanchayat: "Parur" },
+  { taluk: "Tiruvadanai", village: "Oyikkottai", block: "Tiruvadanai", villagePanchayat: "Oyikkottai" },
+  { taluk: "Tiruvadanai", village: "Nagini", block: "Tiruvadanai", villagePanchayat: "Nagini" },
+  { taluk: "Tiruvadanai", village: "Ilayattanvayal", block: "Tiruvadanai", villagePanchayat: "Ilayattanvayal" },
+  { taluk: "Tiruvadanai", village: "Pandukudi", block: "Tiruvadanai", villagePanchayat: "Pandukudi" },
+  { taluk: "Tiruvadanai", village: "Kiliyur", block: "Tiruvadanai", villagePanchayat: "Kiliyur" },
+  { taluk: "Tiruvadanai", village: "Anjukottai", block: "Tiruvadanai", villagePanchayat: "Anjukottai" },
+  { taluk: "Tiruvadanai", village: "Kadambakudi", block: "Tiruvadanai", villagePanchayat: "Kadambakudi" },
+  { taluk: "Tiruvadanai", village: "Mavur", block: "Tiruvadanai", villagePanchayat: "Mavur" },
+  { taluk: "Tiruvadanai", village: "Adiyur", block: "Tiruvadanai", villagePanchayat: "Adiyur" },
+  { taluk: "Tiruvadanai", village: "Neyvayal", block: "Tiruvadanai", villagePanchayat: "Neyvayal" },
+  { taluk: "Tiruvadanai", village: "Tuttakudi", block: "Tiruvadanai", villagePanchayat: "Tuttakudi" },
+  { taluk: "Tiruvadanai", village: "Palangulam", block: "Tiruvadanai", villagePanchayat: "Palangulam" },
+  { taluk: "Tiruvadanai", village: "Kadambur", block: "Tiruvadanai", villagePanchayat: "Kadambur" },
+  { taluk: "Tiruvadanai", village: "Nirkundram", block: "Tiruvadanai", villagePanchayat: "Nirkundram" },
+  { taluk: "Tiruvadanai", village: "Kattavilagam", block: "Tiruvadanai", villagePanchayat: "Kattavilagam" },
+  { taluk: "Tiruvadanai", village: "Paganur", block: "Tiruvadanai", villagePanchayat: "Paganur" },
+  { taluk: "Tiruvadanai", village: "Kukkudi", block: "Tiruvadanai", villagePanchayat: "Kukkudi" },
+  { taluk: "Tiruvadanai", village: "Mangalakkudi", block: "Tiruvadanai", villagePanchayat: "Mangalakkudi" },
+  { taluk: "Tiruvadanai", village: "Sirumalaikkottai", block: "Tiruvadanai", villagePanchayat: "Sirumalaikkottai" },
+  { taluk: "Tiruvadanai", village: "Kattimangalam", block: "Tiruvadanai", villagePanchayat: "Kattimangalam" },
+  { taluk: "Tiruvadanai", village: "Panichchakudi", block: "Tiruvadanai", villagePanchayat: "Panichchakudi" },
+  { taluk: "Tiruvadanai", village: "Chittamangalam", block: "Tiruvadanai", villagePanchayat: "Chittamangalam" },
+  { taluk: "Tiruvadanai", village: "Nilamalagiyamangalam", block: "Tiruvadanai", villagePanchayat: "Nilamalagiyamangalam" },
+  { taluk: "Tiruvadanai", village: "Sirukambayur", block: "Tiruvadanai", villagePanchayat: "Sirukambayur" },
+  { taluk: "Tiruvadanai", village: "Orur", block: "Tiruvadanai", villagePanchayat: "Orur" },
+  { taluk: "Tiruvadanai", village: "Marungur", block: "Tiruvadanai", villagePanchayat: "Marungur" },
+  { taluk: "Tiruvadanai", village: "Pullur", block: "Tiruvadanai", villagePanchayat: "Pullur" },
+  { taluk: "Tiruvadanai", village: "Akkalur", block: "Tiruvadanai", villagePanchayat: "Akkalur" },
+  { taluk: "Tiruvadanai", village: "Nagarikattan", block: "Tiruvadanai", villagePanchayat: "Nagarikattan" },
+  { taluk: "Tiruvadanai", village: "Mallanur", block: "Tiruvadanai", villagePanchayat: "Mallanur" },
+  { taluk: "Tiruvadanai", village: "Vattanam", block: "Tiruvadanai", villagePanchayat: "Vattanam" },
+  { taluk: "Tiruvadanai", village: "Kaliyanagari", block: "Tiruvadanai", villagePanchayat: "Kaliyanagari" },
+  { taluk: "Tiruvadanai", village: "Machchur", block: "Tiruvadanai", villagePanchayat: "Machchur" },
+  { taluk: "Tiruvadanai", village: "Odavayal", block: "Tiruvadanai", villagePanchayat: "Odavayal" },
+  { taluk: "Tiruvadanai", village: "Kodippangu", block: "Tiruvadanai", villagePanchayat: "Kodippangu" },
+  { taluk: "Tiruvadanai", village: "Muthuramalingapattanam", block: "Tiruvadanai", villagePanchayat: "Muthuramalingapattanam" },
+  { taluk: "Tiruvadanai", village: "Telur", block: "Tiruvadanai", villagePanchayat: "Telur" },
+  { taluk: "Tiruvadanai", village: "Karungalakkudi", block: "Tiruvadanai", villagePanchayat: "Karungalakkudi" },
+  { taluk: "Tiruvadanai", village: "Velangudi", block: "Tiruvadanai", villagePanchayat: "Velangudi" },
+  { taluk: "Tiruvadanai", village: "Tondi", block: "Tiruvadanai", villagePanchayat: "Tondi" },
+  { taluk: "Tiruvadanai", village: "Chinna Tondi", block: "Tiruvadanai", villagePanchayat: "Chinna Tondi" },
+  { taluk: "Tiruvadanai", village: "Thalirmarungur", block: "Tiruvadanai", villagePanchayat: "Thalirmarungur" },
+  { taluk: "Tiruvadanai", village: "Kadangudi", block: "Tiruvadanai", villagePanchayat: "Kadangudi" },
+  { taluk: "Tiruvadanai", village: "Sekkantidal", block: "Tiruvadanai", villagePanchayat: "Sekkantidal" },
+  { taluk: "Tiruvadanai", village: "Kil Arumbur", block: "Tiruvadanai", villagePanchayat: "Kil Arumbur" },
+  { taluk: "Tiruvadanai", village: "Kil Panaiyur", block: "Tiruvadanai", villagePanchayat: "Kil Panaiyur" },
+  { taluk: "Tiruvadanai", village: "Pattamangalam", block: "Tiruvadanai", villagePanchayat: "Pattamangalam" },
+  { taluk: "Tiruvadanai", village: "Kulattur", block: "Tiruvadanai", villagePanchayat: "Kulattur" },
+  { taluk: "Tiruvadanai", village: "Tiruvetriyur", block: "Tiruvadanai", villagePanchayat: "Tiruvetriyur" },
+  { taluk: "Tiruvadanai", village: "Kadambanendal", block: "Tiruvadanai", villagePanchayat: "Kadambanendal" },
+  { taluk: "Tiruvadanai", village: "Mugiltagam", block: "Tiruvadanai", villagePanchayat: "Mugiltagam" },
+  { taluk: "Tiruvadanai", village: "Nambutalai", block: "Tiruvadanai", villagePanchayat: "Nambutalai" },
+  { taluk: "Tiruvadanai", village: "Kanattankadu", block: "Tiruvadanai", villagePanchayat: "Kanattankadu" },
+  { taluk: "Tiruvadanai", village: "Puduppattanam", block: "Tiruvadanai", villagePanchayat: "Puduppattanam" },
+  { taluk: "Tiruvadanai", village: "A.Manakkudi", block: "Tiruvadanai", villagePanchayat: "A.Manakkudi" },
+  { taluk: "Tiruvadanai", village: "Alikkudi", block: "Tiruvadanai", villagePanchayat: "Alikkudi" },
   { taluk: "Paramakudi", village: "Paramakudi", block: "Paramakudi", villagePanchayat: "Paramakudi" },
   { taluk: "Paramakudi", village: "Nainarkoil", block: "Paramakudi", villagePanchayat: "Nainarkoil" },
   { taluk: "Paramakudi", village: "Melappaarthibanur", block: "Paramakudi", villagePanchayat: "Melappaarthibanur" },
@@ -755,8 +755,8 @@ function parseLocationCsv(text) {
     const entry = {};
     headers.forEach((header, index) => {
       if (header === taluk) entry.taluk = String(row[index] || "").trim();
-      if (header === "village") entry.village = String(row[index] || "").trim();
-      if (header === "block") entry.block = String(row[index] || "").trim();
+      if (header === village) entry.village = String(row[index] || "").trim();
+      if (header === block) entry.block = String(row[index] || "").trim();
       if (header === "village panchayat" || header === "village panchayat name") entry.villagePanchayat = String(row[index] || "").trim();
     });
     return entry;
@@ -1093,7 +1093,7 @@ function setupEventListeners() {
   
   // Location selection handling
   document.getElementById(taluk).addEventListener("change", handleTalukChange);
-  const blockSelect = document.getElementById("block");
+  const blockSelect = document.getElementById(block);
   if (blockSelect) {
     blockSelect.addEventListener("change", handleBlockChange);
   }
@@ -1423,11 +1423,11 @@ function resetRegistrationForm() {
   form.classList.remove("was-validated");
 
   populateLocationSelects();
-  const hiddenVillage = document.getElementById("village");
+  const hiddenVillage = document.getElementById(village);
   if (hiddenVillage) {
     hiddenVillage.value = "";
   }
-  const blockSelect = document.getElementById("block");
+  const blockSelect = document.getElementById(block);
   if (blockSelect) {
     blockSelect.innerHTML = '<option value="" disabled selected>-- Select Block --</option>';
   }
@@ -1585,9 +1585,9 @@ function toggleVoiceDictation() {
 
 function handleTalukChange() {
   const talukSelect = document.getElementById(taluk);
-  const blockSelect = document.getElementById("block");
+  const blockSelect = document.getElementById(block);
   const panchayatSelect = document.getElementById("village-panchayat");
-  const hiddenVillage = document.getElementById("village");
+  const hiddenVillage = document.getElementById(village);
   const selectedTaluk = talukSelect.value;
 
   if (blockSelect) {
@@ -1614,9 +1614,9 @@ function handleTalukChange() {
 }
 
 function handleBlockChange() {
-  const blockSelect = document.getElementById("block");
+  const blockSelect = document.getElementById(block);
   const panchayatSelect = document.getElementById("village-panchayat");
-  const hiddenVillage = document.getElementById("village");
+  const hiddenVillage = document.getElementById(village);
   const selectedTaluk = document.getElementById(taluk).value;
   const selectedBlock = blockSelect.value;
 
@@ -1642,9 +1642,9 @@ function handleBlockChange() {
 
 function handleVillagePanchayatChange() {
   const selectedTaluk = document.getElementById(taluk).value;
-  const selectedBlock = document.getElementById("block").value;
+  const selectedBlock = document.getElementById(block).value;
   const selectedPanchayat = document.getElementById("village-panchayat").value;
-  const hiddenVillage = document.getElementById("village");
+  const hiddenVillage = document.getElementById(village);
 
   if (hiddenVillage) {
     hiddenVillage.value = "";
@@ -1689,8 +1689,8 @@ function handleRegisterComplaint(e) {
   }
   
   const taluk = document.getElementById(taluk).value;
-  const village = document.getElementById("village").value.trim();
-  const block = document.getElementById("block").value.trim();
+  const village = document.getElementById(village).value.trim();
+  const block = document.getElementById(block).value.trim();
   const villagePanchayat = document.getElementById("village-panchayat").value.trim();
   const locationEntry = state.locationMaster.find(item => item.taluk === taluk && item.block === block && item.villagePanchayat === villagePanchayat) || null;
 
@@ -1872,12 +1872,12 @@ function printFormDraft() {
   const citizenName = document.getElementById("citizen-name").value.trim() || "[Citizen Name]";
   const mobile = document.getElementById("mobile-number").value.trim() || "[Mobile]";
   const taluk = document.getElementById(taluk).value || "[Taluk]";
-  const village = document.getElementById("village").value.trim() || "[Village]";
+  const village = document.getElementById(village).value.trim() || "[Village]";
   const department = document.getElementById("department").value || "[Department]";
   const description = document.getElementById("complaint-desc").value.trim() || "[Description]";
   const priority = document.getElementById("priority").value;
   
-  const block = document.getElementById("block").value.trim() || "[Block]";
+  const block = document.getElementById(block).value.trim() || "[Block]";
   const villagePanchayat = document.getElementById("village-panchayat").value.trim() || "[Village Panchayat]";
 
   const draft = {
